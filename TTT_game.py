@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Nov 14 23:50:07 2020
-
-@author: Aritz (modifications by me)
-
-Tic-tac-toe game
-
-From: https://towardsdatascience.com/reinforcement-learning-implement-tictactoe-189582bea542
-"""
+//////////////////////////////////////////////////////////////////////////////////////////
+// Original author(s): https://towardsdatascience.com/reinforcement-learning-implement-tictactoe-189582bea542
+// Modified by: Aritz Lizoain
+// Github: https://github.com/aritzLizoain
+// My personal website: https://aritzlizoain.github.io/
+// Description: AI + Tic-tac-toe game
+// Copyright 2020, Aritz Lizoain.
+// License: MIT License
+//////////////////////////////////////////////////////////////////////////////////////////
+""" 
 
 """
 Updating Q value function, which is the estimating value of (state, action) pair
@@ -126,7 +128,6 @@ class State:
             return 0
         # not end
         self.isEnd = False
-        return None
     
     """
     Winner
@@ -235,10 +236,9 @@ class State:
         print("\n>> Results: {}-{} ({} ties)".format(counter_Agent1, counter_Agent2, counter_tie))
         if whatToDo == "compete":
             if counter_Agent1 < counter_Agent2:
-                print()
-                print(termcolor.cprint("   Winner: {}!".format(Agent2.name), 'grey', 'on_white'))
+                termcolor.cprint("   Winner: {}!".format(Agent2.name), 'grey', 'on_white')
             elif counter_Agent1 > counter_Agent2:
-                print(termcolor.cprint("   Winner: {}!".format(Agent1.name), 'grey', 'on_white'))
+                termcolor.cprint("   Winner: {}!".format(Agent1.name), 'grey', 'on_white')
                 
     """
     Modify a bit on the play function when Human 
@@ -258,9 +258,9 @@ class State:
             win = self.winner()
             if win is not None:
                 if win == 1:
-                    print(termcolor.cprint("   Winner: {}!".format(Agent1.name), 'white', 'on_red', attrs=['bold']))
+                    termcolor.cprint("   Winner: {}!".format(Agent1.name), 'white', 'on_red', attrs=['bold'])
                 else:
-                    print(termcolor.cprint("   It's a tie", 'grey', 'on_white'))
+                    termcolor.cprint("   It's a tie", 'grey', 'on_white')
                 self.reset()
                 break
             
@@ -274,9 +274,9 @@ class State:
                 win = self.winner()
                 if win is not None:
                     if win == -1:
-                        print(termcolor.cprint("   Winner: {}!".format(Agent2.name), 'white', 'on_green', attrs=['bold']))
+                        termcolor.cprint("   Winner: {}!".format(Agent2.name), 'white', 'on_green', attrs=['bold'])
                     else:
-                        print(termcolor.cprint("   It's a tie", 'grey', 'on_white'))
+                        termcolor.cprint("   It's a tie", 'grey', 'on_white')
                     self.reset()
                     break
 
@@ -467,26 +467,26 @@ Training (COMMENT/UNCOMMENT)
 """
 Agent vs. Agent game (COMMENT/UNCOMMENT)
 """ 
-if __name__ == "__main__":  
-    Agent1 = Player("easy AI", exp_rate=1)
-    Agent1.loadPolicy("Policies/easy")
+# if __name__ == "__main__":  
+#     Agent1 = Player("easy AI", exp_rate=1)
+#     Agent1.loadPolicy("Policies/easy")
     
-    Agent2 = Player("medium AI", exp_rate=1)
-    Agent2.loadPolicy("Policies/medium")
+#     Agent2 = Player("medium AI", exp_rate=1)
+#     Agent2.loadPolicy("Policies/medium")
 
-    st = State(Agent1, Agent2)
-    st.play(100, "compete")
+#     st = State(Agent1, Agent2)
+#     st.play(10000, "compete")
 
 #---------------------------------------------------------------------------
     
 """
 Human vs. Agent game (COMMENT/UNCOMMENT)
 """ 
-# if __name__ == "__main__": 
-#     Agent1 = Player("AI", exp_rate=1)
-#     Agent1.loadPolicy("Policies/unbeatable")
+if __name__ == "__main__": 
+    Agent1 = Player("AI", exp_rate=1)
+    Agent1.loadPolicy("Policies/unbeatable")
     
-#     Agent2 = HumanPlayer("堃堃")
+    Agent2 = HumanPlayer("堃堃")
     
-#     st = State(Agent1, Agent2)
-#     st.playH() # 100 rounds by default
+    st = State(Agent1, Agent2)
+    st.playH() # 100 rounds by default
