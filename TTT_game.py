@@ -25,7 +25,7 @@ import pickle
 import tqdm
 import termcolor
 from termcolor import colored 
-
+import time
 
 """
 VARIABLES
@@ -170,16 +170,12 @@ class State:
         * Judge if reach the end of the game and give reward accordingly
     """
     
-    def play(self, rounds=100, whatToDo="train"):
+    def play(self, rounds=100):
         counter_Agent1 = 0 # initialize counter for Agent1 win
         counter_Agent2 = 0 # initialize counter for Agent2 win
         counter_tie = 0 # initialize counter for tie
-        if whatToDo == "train":
-            displayToDo = ">> Training"
-        elif whatToDo == "compete":
-            displayToDo = ">> Competing" 
-            print(colored("\n   {} vs. {}".format(Agent1.name, Agent2.name), "magenta"))
-        for i in tqdm.tqdm(range(rounds), desc=displayToDo):
+        
+        for i in tqdm.tqdm(range(rounds), desc=">> Training"):
             # if i % 1000 == 0: # display every 1000
             #     print("    Trained rounds: {}".format(i))
             while not self.isEnd:
@@ -231,15 +227,111 @@ class State:
                         self.Agent2.reset()
                         self.reset()
                         break 
-        if whatToDo == "train":
-            Agent1.savePolicy(rounds)
+        Agent1.savePolicy(rounds)
+        Agent2.savePolicy(rounds)
         print("\n>> Results: {}-{} ({} ties)".format(counter_Agent1, counter_Agent2, counter_tie))
-        if whatToDo == "compete":
-            if counter_Agent1 < counter_Agent2:
-                termcolor.cprint("   Winner: {}!".format(Agent2.name), 'grey', 'on_white')
-            elif counter_Agent1 > counter_Agent2:
-                termcolor.cprint("   Winner: {}!".format(Agent1.name), 'grey', 'on_white')
+          
+    """
+    AI vs AI 
+    """
+    def playAI(self, rounds=100):
+        counter_Agent1 = 0 # initialize counter for Agent1 win
+        counter_Agent2 = 0 # initialize counter for Agent2 win
+        counter_tie = 0 # initialize counter for tie
+        for i in tqdm.tqdm(range(rounds), desc=">> Competing"):
+            while not self.isEnd:
+                # Player 1
+                positions = self.availablePositions()
+                Agent1_action = self.Agent1.chooseAction(positions, self.board, self.playerSymbol)
+                # take action and upate board state
+                self.updateState(Agent1_action)
+                # check board status if it is end
+                win = self.winner()
+                if win is not None:
+                    if win == 1:
+                        # print("Winner: {}!".format(self.Agent1.name))
+                        counter_Agent1 = counter_Agent1 + 1
+                    else:
+                        # print("Tie")
+                        counter_tie = counter_tie +1
+                    # self.Agent1.reset()
+                    # self.Agent2.reset()
+                    # self.reset()
+                    break
                 
+            else:
+                # Player 2
+                positions = self.availablePositions()
+                Agent2_action = self.Agent2.chooseAction(positions, self.board, self.playerSymbol)
+                # take action and upate board state
+                self.updateState(Agent2_action)
+                # check board status if it is end
+                win = self.winner()
+                if win is not None:
+                    if win == -1:
+                        # print("Winner: {}!".format(self.Agent1.name))
+                        counter_Agent2 = counter_Agent2 + 1
+                    else:
+                        # print("Tie")
+                        counter_tie = counter_tie +1
+                    # self.Agent1.reset()
+                    # self.Agent2.reset()
+                    # self.reset()
+                    break
+        print(colored("\n   {} vs. {}".format(Agent1.name, Agent2.name), "magenta"))
+        print(">> Results: {}-{} ({} ties)".format(counter_Agent1, counter_Agent2, counter_tie))
+        if counter_Agent1 < counter_Agent2:
+            termcolor.cprint("   Overall winner: {}".format(Agent2.name), 'grey', 'on_white')
+        elif counter_Agent1 > counter_Agent2:
+            termcolor.cprint("   Overall winner: {}".format(Agent1.name), 'grey', 'on_white')
+            
+   
+    """
+    AI vs AI (displaying the game in the console)
+    """
+    def playAI_show(self):
+        print(colored("\n   {} vs. {}".format(Agent1.name, Agent2.name), "magenta"))
+        while not self.isEnd:
+            # Player 1
+            positions = self.availablePositions()
+            Agent1_action = self.Agent1.chooseAction(positions, self.board, self.playerSymbol)
+            # take action and upate board state
+            self.updateState(Agent1_action)
+            print("\n>> {}'s turn".format(Agent1.name))
+            time.sleep(2) 
+            self.showBoard()
+            time.sleep(1)
+            # check board status if it is end
+            win = self.winner()
+            if win is not None:
+                if win == 1:
+                    termcolor.cprint("   Winner: {}!".format(Agent1.name), 'grey', 'on_white')
+                else:
+                    termcolor.cprint("   It's a tie", 'grey', 'on_white')
+                # self.reset()
+                break
+            
+            else:
+                # Player 2
+                positions = self.availablePositions()
+                Agent2_action = self.Agent2.chooseAction(positions, self.board, self.playerSymbol)
+                # take action and upate board state
+                self.updateState(Agent2_action)
+                print("\n>> {}'s turn".format(Agent2.name))
+                time.sleep(2) 
+                self.showBoard()
+                time.sleep(1) 
+                # check board status if it is end
+                win = self.winner()
+                if win is not None:
+                    if win == -1:
+                        termcolor.cprint("   Winner: {}!".format(Agent2.name), 'grey', 'on_white')
+                    else:
+                        termcolor.cprint("   It's a tie", 'grey', 'on_white')
+                    # self.reset()
+                    break
+                               
+        
     """
     Modify a bit on the play function when Human 
     We let player 1 (agent) play first, and at each step, the board is printed
@@ -253,7 +345,9 @@ class State:
             # take action and upate board state
             self.updateState(Agent1_action)
             print("\n>> AI's turn")
+            time.sleep(2) 
             self.showBoard()
+            time.sleep(1) 
             # check board status if it is end
             win = self.winner()
             if win is not None:
@@ -261,7 +355,7 @@ class State:
                     termcolor.cprint("   Winner: {}!".format(Agent1.name), 'white', 'on_red', attrs=['bold'])
                 else:
                     termcolor.cprint("   It's a tie", 'grey', 'on_white')
-                self.reset()
+                # self.reset()
                 break
             
             else:
@@ -270,14 +364,16 @@ class State:
                 Agent2_action = self.Agent2.chooseAction(positions)
 
                 self.updateState(Agent2_action)
+                time.sleep(1) 
                 self.showBoard()
+                time.sleep(1) 
                 win = self.winner()
                 if win is not None:
                     if win == -1:
                         termcolor.cprint("   Winner: {}!".format(Agent2.name), 'white', 'on_green', attrs=['bold'])
                     else:
                         termcolor.cprint("   It's a tie", 'grey', 'on_white')
-                    self.reset()
+                    # self.reset()
                     break
 
     """
@@ -442,11 +538,11 @@ class HumanPlayer:
     
 """
 To do/implement:
-
-    * What is that None display   
-    * Try/test new parameters
-    * Why does Agent1 always win
-    * Train and name them unbeatable etc.
+  
+    * Agent1 learns to start. Agent2 learns pair movements (2,4,6...)
+    * Why is AI vs AI without display not working well?
+    * Rewrite comments, appearance, etc.
+    * Do experiments and write down. Easy vs. unbeatable. See when it reaches optimum state.
 """
 
 #---------------------------------------------------------------------------
@@ -455,38 +551,58 @@ To do/implement:
 Training (COMMENT/UNCOMMENT)
 """
 # if __name__ == "__main__":
-#     # training
-#     Agent1 = Player("AI1")
-#     Agent2 = Player("AI2")
+    
+#     Agent1 = Player("AI_1")
+
+#     Agent2 = Player("AI_2")
 
 #     st = State(Agent1, Agent2)
-#     st.play(50000, "train") 
+#     st.play(20000) # 100 rounds by default
+      
+#---------------------------------------------------------------------------
+
+"""
+AI vs AI (COMMENT/UNCOMMENT)
+""" 
+if __name__ == "__main__": 
+    
+    Agent1 = Player("Stupid AI 1", exp_rate=0)
+    Agent1.loadPolicy("Policies/policy_2rounds_AI_1")
+    
+    Agent2 = Player("Given AI 2", exp_rate=0)
+    Agent2.loadPolicy("Policies/given2")
+
+    st = State(Agent1, Agent2)
+    st.playAI(100) # 100 rounds by default
     
 #---------------------------------------------------------------------------
 
 """
-Agent vs. Agent game (COMMENT/UNCOMMENT)
+AI vs AI with console display (COMMENT/UNCOMMENT)
 """ 
-# if __name__ == "__main__":  
-#     Agent1 = Player("easy AI", exp_rate=1)
-#     Agent1.loadPolicy("Policies/easy")
+# if __name__ == "__main__": 
     
-#     Agent2 = Player("medium AI", exp_rate=1)
-#     Agent2.loadPolicy("Policies/medium")
+#     Agent1 = Player("Stupid AI 1", exp_rate=0)
+#     Agent1.loadPolicy("Policies/policy_2rounds_AI_1")
+    
+#     Agent2 = Player("Given AI 2", exp_rate=0)
+#     Agent2.loadPolicy("Policies/given2")
 
 #     st = State(Agent1, Agent2)
-#     st.play(10000, "compete")
+#     st.playAI_show()
 
 #---------------------------------------------------------------------------
     
 """
 Human vs. Agent game (COMMENT/UNCOMMENT)
 """ 
-if __name__ == "__main__": 
-    Agent1 = Player("AI", exp_rate=1)
-    Agent1.loadPolicy("Policies/unbeatable")
+# if __name__ == "__main__": 
     
-    Agent2 = HumanPlayer("堃堃")
+#     Agent1 = Player("Stupid AI", exp_rate=0)
+#     Agent1.loadPolicy("Policies/given1")
     
-    st = State(Agent1, Agent2)
-    st.playH() # 100 rounds by default
+#     Agent2 = HumanPlayer("YOU")
+    
+#     st = State(Agent1, Agent2)
+#     st.playH()
+    
