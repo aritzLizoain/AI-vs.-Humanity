@@ -344,7 +344,7 @@ class State:
             Agent1_action = self.Agent1.chooseAction(positions, self.board, self.playerSymbol)
             # take action and upate board state
             self.updateState(Agent1_action)
-            print("\n>> AI's turn")
+            print("\n>> {}'s turn".format(Agent1.name))
             time.sleep(2) 
             self.showBoard()
             time.sleep(1) 
@@ -360,6 +360,7 @@ class State:
             
             else:
                 # Player 2
+                print("\n>> {}'s turn".format(Agent2.name))
                 positions = self.availablePositions()
                 Agent2_action = self.Agent2.chooseAction(positions)
 
@@ -513,7 +514,6 @@ class HumanPlayer:
     
     def chooseAction(self, positions):
         while True:
-            print("\n>> Your turn")
             print("\n   Positions: {}".format(positions))
             row = int(input("   Choose a row: "))
             col = int(input("   Choose a column: "))
@@ -538,11 +538,11 @@ class HumanPlayer:
     
 """
 To do/implement:
-  
-    * Agent1 learns to start. Agent2 learns pair movements (2,4,6...)
+    
+    * 20000 rounds is not intelligent enough. I beat it.  
     * Why is AI vs AI without display not working well?
     * Rewrite comments, appearance, etc.
-    * Do experiments and write down. Easy vs. unbeatable. See when it reaches optimum state.
+    * Do experiments and write down. Easy vs. unbeatable. Same level competing? With exp_rate=0? It should tie. See when it reaches optimum state, how many rounds.
 """
 
 #---------------------------------------------------------------------------
@@ -564,16 +564,16 @@ Training (COMMENT/UNCOMMENT)
 """
 AI vs AI (COMMENT/UNCOMMENT)
 """ 
-if __name__ == "__main__": 
+# if __name__ == "__main__": 
     
-    Agent1 = Player("Stupid AI 1", exp_rate=0)
-    Agent1.loadPolicy("Policies/policy_2rounds_AI_1")
+#     Agent1 = Player("Stupid AI 1", exp_rate=0)
+#     Agent1.loadPolicy("Policies/policy_2rounds_AI_1")
     
-    Agent2 = Player("Given AI 2", exp_rate=0)
-    Agent2.loadPolicy("Policies/given2")
+#     Agent2 = Player("Given AI 2", exp_rate=0)
+#     Agent2.loadPolicy("Policies/given2")
 
-    st = State(Agent1, Agent2)
-    st.playAI(100) # 100 rounds by default
+#     st = State(Agent1, Agent2)
+#     st.playAI(100) # 100 rounds by default
     
 #---------------------------------------------------------------------------
 
@@ -596,13 +596,13 @@ AI vs AI with console display (COMMENT/UNCOMMENT)
 """
 Human vs. Agent game (COMMENT/UNCOMMENT)
 """ 
-# if __name__ == "__main__": 
+if __name__ == "__main__": 
     
-#     Agent1 = Player("Stupid AI", exp_rate=0)
-#     Agent1.loadPolicy("Policies/given1")
+    Agent1 = Player("Intelligent AI", exp_rate=0)
+    Agent1.loadPolicy("Policies/policy_20000rounds_AI_1")
     
-#     Agent2 = HumanPlayer("YOU")
+    Agent2 = HumanPlayer("YOU")
     
-#     st = State(Agent1, Agent2)
-#     st.playH()
+    st = State(Agent1, Agent2)
+    st.playH()
     
