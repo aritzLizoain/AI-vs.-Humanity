@@ -12,12 +12,6 @@
 """ 
 
 """
-Updating Q value function, which is the estimating value of (state, action) pair
-Two parts: train 2 agents to play against each other and save their policy
-Secondly, load the policy and make the agent to play against human
-"""
-
-"""
 IMPORTS
 """
 import numpy as np
@@ -33,16 +27,15 @@ VARIABLES
 BOARD_ROWS = 3
 BOARD_COLS = 3
 
+#--------------------------------------------------------------------------- 
+
 """
 3 major components: state, action, and reward.
-State: board state of both the agent and its opponent
-Initialise a 3X3 board with zeros indicating available positions and update positions with 1
-if player 1 takes move and -1 if player 2 takes the move.
+State: board state of both the agent and its opponent-
+Initialise a 3X3 board with zeros indicating available positions and update positions with 1 if player 1 takes move and -1 if player 2 takes the move.
 The action is what positions a player can choose based on the current board state.
 Reward is between 0 and 1 and is only given at the end of the game.
 """
-
-#--------------------------------------------------------------------------- 
       
 class State:
 
@@ -50,8 +43,7 @@ class State:
     Init
     
     We initialise a vacant board and two players: Agent1 and Agent2 (we initialise Agent1 to play first).
-    Each player has a playSymbol, when a player takes an action, its playerSymbol will be filled
-    in the board and the board state will be updated.
+    Each player has a playSymbol, when a player takes an action, its playerSymbol will be filled in the board and the board state will be updated.
     """
     def __init__(self, Agent1, Agent2):
         self.board = np.zeros((BOARD_ROWS, BOARD_COLS))
@@ -65,7 +57,7 @@ class State:
     """
     Board State
     
-        * getHash hashes the current board state so that it can be stored in the state-value dictionary
+        * getHash hashes the current board state so that it can be stored in the state-value dictionary.
         * availablePositions. When a player takes an action, its corresponding symbol will be filled in the board.
         * updateState. After the state being updated, the board will also update the current vacant positions on the board
           and feed it back to the next player in turn.
@@ -134,8 +126,8 @@ class State:
     
     The function checks sum of rows, columns and diagonals, and return 1 if Agent1 wins, -1 if Agent2 wins, 0 if draw
     and None if the game is not yet ended. At the end of the game, 1 is rewarded to winner and 0 to loser.
-    One thing to notice is that we consider draw is also a bad end, so we give our agent Agent1 0.1reward even the
-    game is tie (try different ones)
+    One thing to notice is that we consider draw is also a bad end, so we give our agent Agent1 0.1 reward even the
+    game is tie.
     """
     # only when game ends
     def giveReward(self):
@@ -333,7 +325,7 @@ class State:
                                
         
     """
-    Modify a bit on the play function when Human 
+    AI vs. Human
     We let player 1 (agent) play first, and at each step, the board is printed
     """
     def playH(self):
@@ -399,7 +391,7 @@ class State:
 #---------------------------------------------------------------------------       
 
 """
-Player setting
+Player setting (AI)
 
 Player class that represents the agent.
 The player is able to:
@@ -466,7 +458,7 @@ class Player:
     State-Value update
     
     We will apply value iteration which is updated based on the formula.
-    The formula tells us that the updated value of state t equals the current value of state t
+    The formula tells us that the updated value of state t equals the current value of state st
     adding the difference between the value of next state and the value of current state, which is
     multiplied by a learning rate alpha (given the reward of intermediate state is 0).
     We update the current value slowly.
@@ -503,7 +495,7 @@ class Player:
 #---------------------------------------------------------------------------
 
 """
-Human VS Computer
+Human player setting
 
 Human class to play against the agent.
 This class includes only 1 usable function chooseAction which requires us to input the board position we hope to take
@@ -514,7 +506,7 @@ class HumanPlayer:
     
     def chooseAction(self, positions):
         while True:
-            print("\n   Positions: {}".format(positions))
+            print("\n   Positions (row, column): {}".format(positions))
             row = int(input("   Choose a row: "))
             col = int(input("   Choose a column: "))
             action = (row, col)
@@ -533,17 +525,7 @@ class HumanPlayer:
     
     def reset(self):
         pass
- 
-#---------------------------------------------------------------------------
-    
-"""
-To do/implement:
-    
-    * 20000 rounds is not intelligent enough. I beat it.  
-    * Why is AI vs AI without display not working well?
-    * Rewrite comments, appearance, etc.
-    * Do experiments and write down. Easy vs. unbeatable. Same level competing? With exp_rate=0? It should tie. See when it reaches optimum state, how many rounds.
-"""
+
 
 #---------------------------------------------------------------------------
  
@@ -557,7 +539,7 @@ Training (COMMENT/UNCOMMENT)
 #     Agent2 = Player("AI_2")
 
 #     st = State(Agent1, Agent2)
-#     st.play(20000) # 100 rounds by default
+#     st.play(1000) # 100 rounds by default
       
 #---------------------------------------------------------------------------
 
@@ -566,11 +548,11 @@ AI vs AI (COMMENT/UNCOMMENT)
 """ 
 # if __name__ == "__main__": 
     
-#     Agent1 = Player("Stupid AI 1", exp_rate=0)
-#     Agent1.loadPolicy("Policies/policy_2rounds_AI_1")
+    # Agent1 = Player("Brainless AI", exp_rate=0)
+    # Agent1.loadPolicy("Policies/100_rounds-P1")
     
-#     Agent2 = Player("Given AI 2", exp_rate=0)
-#     Agent2.loadPolicy("Policies/given2")
+    # Agent2 = Player("Unbeatable AI", exp_rate=0)
+    # Agent2.loadPolicy("Policies/100000_rounds-P2")
 
 #     st = State(Agent1, Agent2)
 #     st.playAI(100) # 100 rounds by default
@@ -582,11 +564,11 @@ AI vs AI with console display (COMMENT/UNCOMMENT)
 """ 
 # if __name__ == "__main__": 
     
-#     Agent1 = Player("Stupid AI 1", exp_rate=0)
-#     Agent1.loadPolicy("Policies/policy_2rounds_AI_1")
+#     Agent1 = Player("Brainless AI", exp_rate=0)
+#     Agent1.loadPolicy("Policies/100_rounds-P1")
     
-#     Agent2 = Player("Given AI 2", exp_rate=0)
-#     Agent2.loadPolicy("Policies/given2")
+#     Agent2 = Player("Unbeatable AI", exp_rate=0)
+#     Agent2.loadPolicy("Policies/100000_rounds-P2")
 
 #     st = State(Agent1, Agent2)
 #     st.playAI_show()
@@ -598,11 +580,11 @@ Human vs. Agent game (COMMENT/UNCOMMENT)
 """ 
 if __name__ == "__main__": 
     
-    Agent1 = Player("Intelligent AI", exp_rate=0)
-    Agent1.loadPolicy("Policies/policy_20000rounds_AI_1")
+    Agent1 = Player("Brainless AI", exp_rate=0)
+    Agent1.loadPolicy("Policies/100_rounds-P1")
     
-    Agent2 = HumanPlayer("YOU")
+    Agent2 = HumanPlayer("Jane Doe")
     
     st = State(Agent1, Agent2)
     st.playH()
-    
+   
