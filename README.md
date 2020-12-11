@@ -1,17 +1,23 @@
-# Can you beat AI?
+# Can you beat AI? 🧠:boom::trophy:
 
-## Summary of games
+## :o::crown::heavy_multiplication_x: Tic-Tac-Toe
 
-1. :crown: [Tic-Tac-Toe](https://github.com/aritzLizoain/AI-vs.-Humanity#crown-tic-tac-toe)
-   
-2. Some other (soon)
+### **Train an intelligent agent**
 
-## :crown: Tic-Tac-Toe
+![alt text](https://github.com/aritzLizoain/AI-vs.-Humanity/blob/main/Tic-Tac-Toe/Screen_recordings/Training.png)
 
-[Game folder :notebook:](https://github.com/aritzLizoain/AI-vs.-Humanity/tree/main/Tic-Tac-Toe)
+### **AI vs. AI**
 
-Screenshots etc.
+![alt text](https://github.com/aritzLizoain/AI-vs.-Humanity/blob/main/Tic-Tac-Toe/Screen_recordings/AI_vs_AI.gif)
 
-### **Watch AI vs. AI**
+### **Compete against an AI agent!**
 
-Etc.
+![alt text](https://github.com/aritzLizoain/AI-vs.-Humanity/blob/main/Tic-Tac-Toe/Screen_recordings/AI_vs_Human.gif)
+
+## :soon: Future ideas
+
+* Snake
+
+* Catch
+
+* CubeTrack (+Unity)
