@@ -8,9 +8,20 @@
 
 ___
 
-## :round_pushpin::arrow_double_up::checkered_flag:Wall Jump
+## :round_pushpin::space_invader::checkered_flag:Unity ML Agents
 
-In progress...
+### **Train your intelligent agent to reach the goal**
+
+![alt text](https://github.com/aritzLizoain/AI-vs.-Humanity/blob/main/Unity%20ML%20Agents/Media/Trained.gif)
+
+### **Watch it fail and learn**
+
+![alt text](https://github.com/aritzLizoain/AI-vs.-Humanity/blob/main/Unity%20ML%20Agents/Media/Non-trained.gif)
+
+### **Analyze the results and experiment**
+
+![alt text](https://github.com/aritzLizoain/AI-vs.-Humanity/blob/main/Unity%20ML%20Agents/Media/Training.png)
+
 ___
 
 ## :o::crown::heavy_multiplication_x: Tic-Tac-Toe
