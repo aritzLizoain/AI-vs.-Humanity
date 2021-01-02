@@ -16,7 +16,7 @@ ___
 
 ### **Watch it fail and learn**
 
-![alt text](https://github.com/aritzLizoain/AI-vs.-Humanity/blob/main/Unity%20ML%20Agents/Media/Non-trained.gif)
+![alt text](https://github.com/aritzLizoain/AI-vs.-Humanity/blob/main/Unity%20ML%20Agents/Media/Non-Trained.gif)
 
 ### **Analyze the results and experiment**
 
