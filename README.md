@@ -41,8 +41,4 @@ ___
 
 ## :soon: Future ideas
 
-* Snake
-
-* Catch
-
-* CubeTrack (+Unity)
+* Creating my own environment in Unity
